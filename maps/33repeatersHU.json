@@ -1,0 +1,332 @@
+[
+ {
+   "Frequency": 144.5,
+   "Offset": "+0 MHz",
+   "Tone Up / Down": "",
+   "Location": "Gerecse",
+   "Call": "HA5KDR",
+   "Use": "OPEN",
+   "Modes": "FM",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 144.55,
+   "Offset": "+0 MHz",
+   "Tone Up / Down": "114.8",
+   "Location": "Budapest",
+   "Call": "HG5CJX",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 144.5625,
+   "Offset": "-74.0875 MHz",
+   "Tone Up / Down": "114.8",
+   "Location": "Galyatető (Mátra)",
+   "Call": "HG6RVX",
+   "Use": "OPEN",
+   "Modes": "FM",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 144.6875,
+   "Offset": "+0 MHz",
+   "Tone Up / Down": "",
+   "Location": "Barcs",
+   "Call": "HG2CR",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 144.7,
+   "Offset": "-74.225 MHz",
+   "Tone Up / Down": "",
+   "Location": "Gerecse",
+   "Call": "HG2RVX",
+   "Use": "OPEN",
+   "Modes": "FM",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 144.725,
+   "Offset": "+0 MHz",
+   "Tone Up / Down": "",
+   "Location": "Szeged",
+   "Call": "HA8KCK",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 144.725,
+   "Offset": "+0 MHz",
+   "Tone Up / Down": "",
+   "Location": "Székesfehérvár",
+   "Call": "HG4RUC",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.3,
+   "Offset": "+0 MHz",
+   "Tone Up / Down": "",
+   "Location": "Szeged",
+   "Call": "HA8FP",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.35,
+   "Offset": "+0 MHz",
+   "Tone Up / Down": "",
+   "Location": "Tiszaladány",
+   "Call": "HG9HZL",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.6,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "114.8",
+   "Location": "Budapest, Sváb-hegy",
+   "Call": "HG5RVB",
+   "Use": "OPEN",
+   "Modes": "FM",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.6,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "131.8",
+   "Location": "Debrecen",
+   "Call": "HG0RVA",
+   "Use": "OPEN",
+   "Modes": "EchoLink Fusion",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.6125,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "",
+   "Location": "Fonyód (Balaton)",
+   "Call": "HG3RVB",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.6375,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "107.2 / 107.2",
+   "Location": "Gyor Nyulhegy",
+   "Call": "HG1RVD",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.65,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "",
+   "Location": "Érd",
+   "Call": "HG7RVA",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.6625,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "107.2",
+   "Location": "Dorog (Kálvária-hegy)",
+   "Call": "HG2RVC",
+   "Use": "OPEN",
+   "Modes": "FM",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.6625,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "114.8 / 114.8",
+   "Location": "Nyíregyháza",
+   "Call": "HG0RVB",
+   "Use": "OPEN",
+   "Modes": "FM",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.6625,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "131.8",
+   "Location": "Szeged",
+   "Call": "HG8RVC",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.6625,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "",
+   "Location": "Zalaegerszeg",
+   "Call": "HG1RVA",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink Fusion",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.675,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "114.8",
+   "Location": "Hármashatár-hegy",
+   "Call": "HG5RVA",
+   "Use": "OPEN",
+   "Modes": "Fusion",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.6875,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "114.8",
+   "Location": "Miskolc (Bukkszentkereszt, Nagy-Somhegy)",
+   "Call": "HG9RVB",
+   "Use": "OPEN",
+   "Modes": "FM Fusion",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.6875,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "131.8 / 131.8",
+   "Location": "Rem",
+   "Call": "HG8RVD",
+   "Use": "OPEN",
+   "Modes": "FM",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.6875,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "107.2",
+   "Location": "Sopron",
+   "Call": "HG1RVB",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.7,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "74.4",
+   "Location": "Igal",
+   "Call": "HG3RVF",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.7125,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "107.2 / 107.2",
+   "Location": "Porva",
+   "Call": "HG2RVA",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.725,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "114.8 / 114.8",
+   "Location": "Szalajka-volgy",
+   "Call": "HG9RVA",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.7375,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "74.4",
+   "Location": "Szekszard",
+   "Call": "HG3RVC",
+   "Use": "OPEN",
+   "Modes": "FM",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.7625,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "131.8 / 131.8",
+   "Location": "Kiskunfélegyháza",
+   "Call": "HG8RVA",
+   "Use": "OPEN",
+   "Modes": "FM",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.7625,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "114.8 / 114.8",
+   "Location": "Ózd, Drótos-hegy",
+   "Call": "HG9RVD",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.775,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "74.4 / 74.4",
+   "Location": "Pécs (Misina-tető)",
+   "Call": "HG3RVA",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.775,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "114.8",
+   "Location": "Sátoraljaújhely (Magas-hegy)",
+   "Call": "HG9RVC",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.7875,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "114.8",
+   "Location": "Cegléd",
+   "Call": "HG7RVC",
+   "Use": "OPEN",
+   "Modes": "FM",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.7875,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "107.2",
+   "Location": "Esztergom (Vaskapu-hegy)",
+   "Call": "HG2RVD",
+   "Use": "OPEN",
+   "Modes": "FM EchoLink",
+   "FIELD8": ""
+ },
+ {
+   "Frequency": 145.7875,
+   "Offset": "-0.6 MHz",
+   "Tone Up / Down": "131.8 / 131.8",
+   "Location": "Gyula",
+   "Call": "HG8RVE",
+   "Use": "OPEN",
+   "Modes": "FM",
+   "FIELD8": ""
+ }
+]

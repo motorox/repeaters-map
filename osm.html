@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>YO database</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha384-VzLXTJGPSyTLX6d96AxgkKvE/LRb7ECGyTxuwtpjHnVWVZs2gp5RDjeM/tgBnVdM"
+      crossorigin="anonymous"
+    />
+
+   <script
+      src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"
+      integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+      integrity="sha384-RFZC58YeKApoNsIbBxf4z6JJXmh+geBSgkCQXFyh+4tiFSJmJBt+2FbjxW7Ar16M"
+      crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js"></script>
+  </head>
+
+  <body>
+    <h1>YO database</h1>
+
+    <p>Here's an interactive map indicating the repeators in YO area.
+
+    <div id="map" style="width: 800px; height: 440px; border: 1px solid #AAA;"></div>
+
+    <br/><br/><div>Stuff used:<br/>
+      <p>https://github.com/pointhi/leaflet-color-markers - icons</p>
+      <p>https://github.com/yo6nam/yodb - YO db file</p>
+      <br/>
+      <p>http://ha2to.orbel.hu/content/repeaters/en/index.html</p>
+      <p>https://www.repeaterbook.com/row_repeaters/Display_SS.php?state_id=HU&band=14&loc=%&call=%&use=%</p>
+      <p>https://repeaterbook.com/row_repeaters/Display_SS.php?state_id=RS&freq=14%&band6=%&loc=%&call=%&status_id=%&features=%&coverage=%&use=%</p>
+      <p>http://lea.hamradio.si/~s51kq/S5RPT.HTM</p>
+      <p>https://www.convertjson.com/html-table-to-json.htm</p>
+      <p>https://clatsopauxcomm.org/technical/vhf-uhf</p>
+      <p>https://github.com/jleh/qth-locator</p>
+    </div>
+    <div>
+      <p>An example of how to use <a href="https://leafletjs.com/" target="_blank">Leaflet</a>.
+      <p>From the article <a href="https://asmaloney.com/2014/01/code/creating-an-interactive-map-with-leaflet-and-openstreetmap" target="_blank">Creating An Interactive Map With Leaflet and OpenStreetMap</a>
+      <p>Andy Maloney // <a href="https://asmaloney.com" target="_blank">asmaloney.com</a>
+      <br/>23 Jan 2014
+      <p>
+        <b>[06 May 2021]</b>        
+        <ul>
+          <li>Updated to Leaflet 1.7.1, and jQuery 3.6.0.</li>
+          <li>All files reformatted with <a href="https://prettier.io/">prettier</a>.</li>
+          <li>Use <i>https</i> for URLs.</li>
+        </ul>
+      </p>
+      <p><b>[08 Oct 2019]</b>
+        <ul>
+          <li>Updated to Leaflet 1.5.1 and jQuery 3.4.1.</li>
+          <li>Added <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity">Subresource Integrity</a> to CSS and CDN JavaScript.</li>
+          <li>Changed the marker file from .json to .js since it is actually a JavaScript file.</li>
+          <li>Added a new country to the list :-)</li>
+        </ul>
+      <p><b>[16 Jul 2016]</b> Switched to Leaflet 0.7.7.
+      <p><b>[12 Jul 2016]</b> MapQuest discontinued the tile set I was using, so I switched to OpenStreetMap’s tiles. Note that these are useful only for testing. They say on their site:
+        <blockquote>"Apart from very limited testing purposes, you should not use the tiles supplied by OpenStreetMap.org itself."</blockquote>
+      <p><b>[19 Apr 2014]</b> Added <i>http:</i> to the scheme-less ajax.googleapis.com URI so double-clicking this file to open in the browser works.
+    </div>
+    <script type='text/javascript' src='maps/markers.js'></script>
+    <script type='text/javascript' src='qth-locator.js  '></script>
+    <script type='text/javascript' src='maps/repetors-leaf.js'></script>
+  </body>
+</html>
