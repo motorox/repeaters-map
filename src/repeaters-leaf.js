@@ -1,4 +1,48 @@
+/**
+ * implemented a sort of a queue for the requests.
+ * queryCallFunc() is the function that is called to start the calls until the queus is empty. It contains the call to server.
+ * getAddressForMarker() is the function that adds workload to the queue.
+ */
+var queue = [];
+function queryCallFunc() {
+  var promise = $.ajax({
+        "type": "GET",
+        "url": 'https://nominatim.openstreetmap.org/search?format=geojson&limit=5&city=${' + encodeURI(queue[0].address) + '}',        
+    }).promise();
+  
+    promise.then(function(response) {
+        if(response.features && response.features.length > 0) {
+          queue[0].marker.setLatLng([response.features[0].geometry.coordinates[1], response.features[0].geometry.coordinates[0]]);
+        }
+        queue[0].deferred.resolve(response);
+        queue.shift();
+        if(queue.length > 0) {
+            queue[0].isActiveRequest = true;
+            queryCallFunc();
+        }
+    });
 
+    promise.fail(function(xhr, error, message) {
+       queue[0].deferred.reject(arguments);
+       queue.shift();
+        if(queue.length > 0) {            
+            queue[0].isActiveRequest = true;
+            queryCallFunc();
+        }
+    });
+}
+
+function getAddressForMarker(address, marker) {
+    var dfd = $.Deferred();
+    queue.push({"deferred": dfd, "address": address, "marker": marker, "isActiveRequest": false});
+    if(!queue[0].isActiveRequest) {
+        queue[0].isActiveRequest = true;  
+        queryCallFunc();
+    }    
+    return dfd.promise();
+}
+
+// the map
 var map = L.map('map', {
   center: [45.76, 24.0],
   minZoom: 2,
@@ -11,14 +55,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   subdomains: ['a', 'b', 'c'],
 }).addTo(map);
 
-// var myURL = jQuery('script[src$="repeaters-leaf.js"]').attr('src').replace('leaf-demo.js', '');
-// var myIcon = L.icon({
-//   iconUrl: myURL + 'images/pin24.png',
-//   iconRetinaUrl: myURL + 'images/pin48.png',
-//   iconSize: [29, 24],
-//   iconAnchor: [9, 21],
-//   popupAnchor: [0, -14],
-// })
+// different pins for different types of repeaters
 const shadowUrl = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png';
 var redIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
@@ -79,72 +116,6 @@ console.log(distance('IO91wm', 'KP20le')); // 1821.5 km
 console.log(bearingDistance('FN20qr', 'KP21ol')); // 6586.72 km, 49.16 degrees
 console.log(latLngToLocator(60.179, 24.945)); // KP21le
 
-// var settings = {
-//   'cache': false,
-//   'dataType': "jsonp",
-//   "async": true,
-//   "crossDomain": true,
-//   "url": "./FM-repeaters-HU.json",
-//   "method": "GET",
-//   "headers": {
-//     "accept": "application/json",
-//     "Access-Control-Allow-Origin": "*"
-//   }
-// }
-
-// $.ajax(settings).done(function (response) {
-//   console.log(2222);
-//   console.log(response);
-// }).fail(function (jqXHR, textStatus, errorThrown) {
-//   console.log(jqXHR);
-//   console.log(textStatus);
-//   console.log(errorThrown);
-// });
-
-// var json = (function() {
-//   var json = null;
-//   $.ajax({
-//     'async': false,
-//     'global': false,
-//     "crossDomain": true,
-//     'url': "./FM-repeaters-HU.json",
-//     'dataType': "json",
-//     'success': function(data) {
-//       json = data;
-//     }
-//   });
-//   return json;
-// })();
-
-// console.log(json);
-
-// $.getJSON("./FM-repeaters-HU.json", function(json) {
-//   console.log(json); // this will show the info it in firebug console
-// });
-
-function placeYoMarkers(data) {
-  $.each(data.nodes, function (key, val) {
-    var marker;
-    if (!repeaters[val.overlay]) { repeaters[val.overlay] = L.layerGroup(); }
-
-    if (val.functional == "inactiv") {
-      marker = L.marker([val.lat, val.lon], { icon: redIcon })
-        .bindPopup(makePopup(val));
-      // .addTo(map)
-    } else {
-      var selectedIcon = blueIcon;
-      if (val.overlay == "dstar") { selectedIcon = greenIcon; }
-      if (val.overlay == "tetra") { selectedIcon = greyIcon; }
-      if (val.overlay.includes("dmr")) { selectedIcon = orangeIcon; }
-      marker = L.marker([val.lat, val.lon], { icon: selectedIcon })
-        .bindPopup(makePopup(val));
-      // .addTo(map)  
-    }
-    marker.addTo(repeaters[val.overlay]);
-
-  });
-}
-
 function placeLocatorMarkers(overlay, mapFunc, ...data) {
   return new Promise(function (resolve, reject) {
   var repeaters = {};
@@ -155,47 +126,6 @@ function placeLocatorMarkers(overlay, mapFunc, ...data) {
     iconCreateFunction: function(cluster) {
       return new L.DivIcon({ html: '<b>' + cluster.getChildCount() + '</b>' });
     }
-    // iconCreateFunction: function(cluster) {
-    //   var children = cluster.getAllChildMarkers();
-    //   console.log(children);
-    //   var sum = children.length;
-    //   // for (var i = 0; i < children.length; i++) {
-    //   //   sum += children[i].feature.properties.total;
-    //   // }
-
-    //   var childCount = cluster.getChildCount()
-
-    //   var c = ' marker-cluster-';
-    //   if (childCount + sum <= 50) {
-    //     c += 'small';
-    //   } else if (childCount + sum <= 250) {
-    //     c += 'medium';
-    //   } else {
-    //     c += 'large';
-    //   }
-
-    //   return new L.DivIcon({
-    //     html: '<div><span>' + sum + '</span></div>',
-    //     className: 'marker-cluster marker-cluster-' + c,
-    //     iconSize: new L.Point(40, 40)
-    //   });
-    // },
-    // spiderfyShapePositions: function(count, centerPt) {
-    //   var distanceFromCenter = 35,
-    //       markerDistance = 45,
-    //       lineLength = markerDistance * (count - 1),
-    //       lineStart = centerPt.y - lineLength / 2,
-    //       res = [],
-    //       i;
-
-    //   res.length = count;
-
-    //   for (i = count - 1; i >= 0; i--) {
-    //       res[i] = new Point(centerPt.x + distanceFromCenter, lineStart + markerDistance * i);
-    //   }
-
-    //   return res;
-    // }
   }); }
   data.forEach(element => {
     element.map(el => mapFunc(el, overlay, repeaters));
@@ -217,7 +147,7 @@ mapYOFunc = function (val, overlay, repeaters) {
   if (val.overlay == "tetra") { selectedIcon = greyIcon; }
   if (val.overlay.includes("dmr")) { selectedIcon = orangeIcon; }
   if (val.functional == "inactiv") { selectedIcon = redIcon; }
-  marker = L.marker([val.lat, val.lon], { icon: selectedIcon })
+  var marker = L.marker([val.lat, val.lon], { icon: selectedIcon })
     .bindPopup(makeYOPopup(val));
     // .addTo(map)  
   // marker.addTo(repeaters[overlay]);
@@ -226,49 +156,40 @@ mapYOFunc = function (val, overlay, repeaters) {
 
 mapHuFunc = function(val, overlay, repeaters) {
   if(val["QTH Locator"]){
-    var marker;
     var [lat, lon] = locatorToLatLng(val["QTH Locator"]);
     var selectedIcon = blueIcon;
     if (val.Mode.toLowerCase().includes("dstar")) { selectedIcon = greenIcon; }
     if (val.Mode.toLowerCase().includes("tetra")) { selectedIcon = greyIcon; }
     if (val.Mode.toLowerCase().includes("dmr")) { selectedIcon = orangeIcon; }
     if (val.State == "inactive") { selectedIcon = redIcon; }
-    marker = L.marker([lat, lon], { icon: selectedIcon }).bindPopup(makePopup2(val));
+    var marker = L.marker([lat, lon], { icon: selectedIcon }).bindPopup(makePopupHu(val));
     repeaters[overlay].addLayer(marker);
   }
 }
 
 mapSiFunc = function(val, overlay, repeaters) {
   if(val["LOC"]){
-    var marker;
     var [lat, lon] = locatorToLatLng(val["LOC"]);
     var selectedIcon = blueIcon;
     // if (val.Mode.toLowerCase().includes("dstar")) { selectedIcon = greenIcon; }
     // if (val.Mode.toLowerCase().includes("tetra")) { selectedIcon = greyIcon; }
     // if (val.Mode.toLowerCase().includes("dmr")) { selectedIcon = orangeIcon; }
     // if (val.State == "inactive") { selectedIcon = redIcon; }
-    marker = L.marker([lat, lon], { icon: selectedIcon }).bindPopup(makePopupSi(val));
+    var marker = L.marker([lat, lon], { icon: selectedIcon }).bindPopup(makePopupSi(val));
     repeaters[overlay].addLayer(marker);
   }
 }
 
 mapYTFunc = function(val, overlay, repeaters) {
-  getCoordsFromAddress2(val["Location"]).then(function(coords) {
-    if (coords.features.length > 0) {
-      var marker;
-      var selectedIcon = blueIcon;
-      var [lon, lat] = coords.features[0].geometry.coordinates;
-      if (val.Modes.toLowerCase().includes("dstar")) { selectedIcon = greenIcon; }
-      if (val.Modes.toLowerCase().includes("tetra")) { selectedIcon = greyIcon; }
-      if (val.Modes.toLowerCase().includes("dmr")) { selectedIcon = orangeIcon; }
-      if (val.State == "inactive") { selectedIcon = redIcon; }
-      marker = L.marker([lat, lon], { icon: selectedIcon }).bindPopup(makePopupYt(val));
-      marker.addTo(repeaters[overlay]);
-     }
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+  var selectedIcon = blueIcon;
+  var [lon, lat] = [20.457, 44.787];//until getting the real point, they are in Belgrade :)
+  if (val.Modes.toLowerCase().includes("dstar")) { selectedIcon = greenIcon; }
+  if (val.Modes.toLowerCase().includes("tetra")) { selectedIcon = greyIcon; }
+  if (val.Modes.toLowerCase().includes("dmr")) { selectedIcon = orangeIcon; }
+  if (val.State == "inactive") { selectedIcon = redIcon; }
+  var marker = L.marker([lat, lon], { icon: selectedIcon }).bindPopup(makePopupYt(val));
+  marker.addTo(repeaters[overlay]);
+  getAddressForMarker(val.Location, marker);
 }
 
 function makePopupYt(node) {
@@ -284,7 +205,7 @@ function makePopupYt(node) {
   return popup;
 }
 
-function makePopup2(node) {
+function makePopupHu(node) {
   let popup = '<div><b><i>' + node.Callsign + '</i></b><br><b>' + node["QTH/Name"] + '</b><br><div>' + "" + '</div>' + '<ul style="padding-left: 8px;font-size: smaller;">';
   $.each(node, function (k, v) {
     if (k == 'Callsign' || k == 'QTH/Name' || k == 'banda' || k == 'description' || k == 'nameA' || k == 'overlay' || k == 'online' || k == 'pl_in' || k == 'pl_out') {
@@ -310,55 +231,19 @@ function makePopupSi(node) {
   return popup;
 }
 
-function getCoordsFromAddress(address) {
-  const api = 'https://nominatim.openstreetmap.org/search?format=geojson&q=' + encodeURI(address);
-  return new Promise((resolve) => {
-    fetch(api)
-      .then((response) => response.json())
-      .then((data) => {
-        resolve(data.features);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  });
-}
-
-function getCoordsFromAddress2(address) {
-  const api = 'https://nominatim.openstreetmap.org/search?format=geojson&limit=5&city=${' + encodeURI(address) + '}';
-  return $.ajax({
-    url: api,
-    method: 'GET',
-    async: false
-  });
-}
-
 $.getJSON({
   url: "https://raw.githubusercontent.com/yo6nam/yodb/main/all.json",
   cache: true,
   crossDomain: true,
   crossOriginIsolated: false
 }, function (data) {
-  // placeYoMarkers(data);
-  // placeLocatorMarkers(fm_markers_hu, "FM-HU");
-  // placeLocatorMarkers(dmr_markers_hu, "DMR-HU");
-  // placeLocatorMarkers(dstar_markers_hu, "DSTAR-HU");
-  // placeLocatorMarkers(dstar_markers_hu, "C4FM-HU");
 
-  const prom_yo = placeLocatorMarkers("YO-repeaters", mapYOFunc, Object.values(data.nodes).map((val) => val));//.then(function(repeaters) {
-    // addLayers2Map(repeaters);
-  // });
-  const prom_ha = placeLocatorMarkers("HA-repeaters", mapHuFunc, fm_markers_hu, dmr_markers_hu, dstar_markers_hu, c4fm_marker_hu);//.then(function(repeaters) {
-    // addLayers2Map(repeaters);
-  // });
-  const prom_si = placeLocatorMarkers("S5-repeaters", mapSiFunc, markers_2m_fm_s5, markers_70cm_fm_s5, markers_ecolink_s5);//.then(function(repeaters) {
-    // addLayers2Map(repeaters);
-  // });
-  // const prom_yt = placeLocatorMarkers("YT-repeaters", mapYTFunc, markers_YT);//.then(function(repeaters) {
-  //   addLayers2Map(repeaters);
-  // });
+  const prom_yo = placeLocatorMarkers("YO-repeaters", mapYOFunc, Object.values(data.nodes).map((val) => val));
+  const prom_ha = placeLocatorMarkers("HA-repeaters", mapHuFunc, fm_markers_hu, dmr_markers_hu, dstar_markers_hu, c4fm_marker_hu);
+  const prom_si = placeLocatorMarkers("S5-repeaters", mapSiFunc, markers_2m_fm_s5, markers_70cm_fm_s5, markers_ecolink_s5);
+  const prom_yt = placeLocatorMarkers("YT-repeaters", mapYTFunc, markers_YT);
   
-  Promise.all([prom_yo, prom_ha, prom_si]).then(function(repeaters) {
+  Promise.all([prom_yo, prom_ha, prom_si, prom_yt]).then(function(repeaters) {
     var all_repeaters = {};
     repeaters.map((v) => {
       $.each(v, function(key, val) {
