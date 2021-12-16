@@ -44,7 +44,7 @@ function getAddressForMarker(address, marker) {
 
 // the map
 var map = L.map('map', {
-  center: [45.76, 24.0],
+  center: [45.7538, 21.2257], //Timisoara
   minZoom: 2,
   zoom: 6,
 });
