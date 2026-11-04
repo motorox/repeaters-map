@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repeaters Map - Interactive Radio Repeater Database</title>
+    <meta name="description" content="Interactive OpenStreetMap with radio repeaters in YO, YT, HA, S5 areas. Easy to integrate into WordPress and other websites." />
+    <meta name="keywords" content="repeaters, radio, map, OSM, OpenStreetMap, ham radio" />
+    
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #667eea;
+        --primary-dark: #764ba2;
+        --success: #10b981;
+        --error: #ef4444;
+        --text: #333;
+        --text-light: #666;
+        --bg-light: #f5f5f5;
+        --border: #e0e0e0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        line-height: 1.6;
+        color: var(--text);
+        background: var(--bg-light);
+      }
+
+      header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+        padding: 4rem 2rem;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      header h1 {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+      }
+
+      header p {
+        font-size: 1.25rem;
+        opacity: 0.95;
+        margin-bottom: 2rem;
+      }
+
+      .button {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        margin: 0.5rem;
+        background: white;
+        color: var(--primary);
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: 2px solid white;
+      }
+
+      .button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      section {
+        background: white;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: var(--primary);
+      }
+
+      h3 {
+        font-size: 1.25rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--primary-dark);
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .feature-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid var(--primary);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      .feature-card h3 {
+        color: var(--text);
+        margin-top: 0;
+      }
+
+      .feature-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      code {
+        background: #f0f0f0;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9em;
+      }
+
+      pre {
+        background: #2d2d2d;
+        color: #f8f8f2;
+        padding: 1.5rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+      }
+
+      .integration-methods {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .method {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+      }
+
+      .method h3 {
+        color: var(--primary);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background: var(--primary);
+        color: white;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+      }
+
+      .version-info {
+        background: #f0f7ff;
+        border-left: 4px solid var(--primary);
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+      }
+
+      footer {
+        background: #2d2d2d;
+        color: white;
+        text-align: center;
+        padding: 2rem;
+        margin-top: 3rem;
+      }
+
+      .stat {
+        text-align: center;
+        padding: 1rem;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary);
+      }
+
+      .stat-label {
+        color: var(--text-light);
+        font-size: 0.95rem;
+      }
+
+      .improvements-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .improvement {
+        background: white;
+        padding: 1rem;
+        border-radius: 6px;
+        border-left: 4px solid var(--success);
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      .improvement strong {
+        color: var(--success);
+        min-width: 25px;
+      }
+
+      @media (max-width: 768px) {
+        header h1 {
+          font-size: 2rem;
+        }
+
+        header p {
+          font-size: 1rem;
+        }
+
+        .container {
+          padding: 1rem;
+        }
+
+        section {
+          padding: 1.5rem;
+        }
+
+        h2 {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>🗺️ Repeaters Map</h1>
+      <p>Interactive OpenStreetMap with Radio Repeaters • Easy Integration • Modern Tech Stack</p>
+      <div>
+        <a href="#quickstart" class="button">Quick Start</a>
+        <a href="osm.html" class="button">View Map</a>
+        <a href="#integration" class="button">Integrate</a>
+        <a href="https://github.com/motorox/repeaters-map" class="button">GitHub</a>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Version 2.0 -->
+      <section class="version-info">
+        <strong>✨ Version 2.0 Released</strong>
+        <p>Complete modernization: Removed jQuery, updated all dependencies, added WordPress support, improved error handling, and responsive design.</p>
+      </section>
+
+      <!-- Quick Start -->
+      <section id="quickstart">
+        <h2>🚀 Quick Start</h2>
+        
+        <h3>Option 1: Standalone Map (Fastest)</h3>
+        <p>Simply open <code>osm.html</code> or visit the <a href="osm.html">live map</a></p>
+
+        <h3>Option 2: Embed Script (WordPress, Websites)</h3>
+        <p>Add this one line to your page:</p>
+        <pre>&lt;div class="repeaters-map" data-width="100%" data-height="600px"&gt;&lt;/div&gt;
+&lt;script src="https://motorox.github.io/repeaters-map/embed.js"&gt;&lt;/script&gt;</pre>
+
+        <h3>Option 3: Iframe</h3>
+        <p>Embed in an iframe:</p>
+        <pre>&lt;iframe src="https://motorox.github.io/repeaters-map/embed.html" 
+        width="100%" height="600px"&gt;&lt;/iframe&gt;</pre>
+      </section>
+
+      <!-- Key Improvements -->
+      <section>
+        <h2>✨ What's New in v2.0</h2>
+        <div class="improvements-grid">
+          <div class="improvement">
+            <strong>✓</strong>
+            <div>
+              <strong>No jQuery</strong>
+              <p style="font-size: 0.9rem; margin-top: 0.25rem;">Modern Fetch API, 87KB smaller</p>
+            </div>
+          </div>
+          <div class="improvement">
+            <strong>✓</strong>
+            <div>
+              <strong>Config File</strong>
+              <p style="font-size: 0.9rem; margin-top: 0.25rem;">Centralized settings</p>
+            </div>
+          </div>
+          <div class="improvement">
+            <strong>✓</strong>
+            <div>
+              <strong>Icon Factory</strong>
+              <p style="font-size: 0.9rem; margin-top: 0.25rem;">70% less code duplication</p>
+            </div>
+          </div>
+          <div class="improvement">
+            <strong>✓</strong>
+            <div>
+              <strong>Error Handling</strong>
+              <p style="font-size: 0.9rem; margin-top: 0.25rem;">Retry logic + fallbacks</p>
+            </div>
+          </div>
+          <div class="improvement">
+            <strong>✓</strong>
+            <div>
+              <strong>Latest Libs</strong>
+              <p style="font-size: 0.9rem; margin-top: 0.25rem;">Leaflet 1.9.4</p>
+            </div>
+          </div>
+          <div class="improvement">
+            <strong>✓</strong>
+            <div>
+              <strong>Data Timestamp</strong>
+              <p style="font-size: 0.9rem; margin-top: 0.25rem;">Shows last update</p>
+            </div>
+          </div>
+          <div class="improvement">
+            <strong>✓</strong>
+            <div>
+              <strong>HTTPS</strong>
+              <p style="font-size: 0.9rem; margin-top: 0.25rem;">All resources secure</p>
+            </div>
+          </div>
+          <div class="improvement">
+            <strong>✓</strong>
+            <div>
+              <strong>Responsive</strong>
+              <p style="font-size: 0.9rem; margin-top: 0.25rem;">Mobile-friendly</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features -->
+      <section>
+        <h2>✨ Features</h2>
+        <div class="features">
+          <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3>Interactive Map</h3>
+            <p>Zoom, pan, and explore radio repeaters across multiple countries with an intuitive interface.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🏷️</div>
+            <h3>Color-Coded Markers</h3>
+            <p>Instantly identify repeater types: FM, D-STAR, DMR, Tetra, and Inactive stations.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📍</div>
+            <h3>Smart Clustering</h3>
+            <p>Markers automatically cluster when zoomed out for better performance and readability.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🌍</div>
+            <h3>Multi-Country</h3>
+            <p>Coverage for YO, YT, HA, S5 areas with layered repeater databases.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3>Fully Responsive</h3>
+            <p>Perfect on desktop, tablet, and mobile devices with touch support.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">⚙️</div>
+            <h3>Highly Customizable</h3>
+            <p>Easy configuration via <code>config.js</code> without touching core code.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Integration -->
+      <section id="integration">
+        <h2>🔌 Integration Methods</h2>
+        
+        <div class="integration-methods">
+          <div class="method">
+            <span class="badge">Easiest</span>
+            <h3>WordPress</h3>
+            <p>Add custom HTML block with 2 lines of code. Full documentation included.</p>
+            <p><strong>Time to integrate:</strong> &lt;2 minutes</p>
+            <a href="INTEGRATION.md#wordpress-integration">Learn more →</a>
+          </div>
+
+          <div class="method">
+            <span class="badge">Simple</span>
+            <h3>Iframe Embed</h3>
+            <p>Embed as iframe without any JavaScript changes to your site.</p>
+            <p><strong>Time to integrate:</strong> &lt;1 minute</p>
+            <a href="INTEGRATION.md#option-3-iframe-embed">Learn more →</a>
+          </div>
+
+          <div class="method">
+            <span class="badge">Flexible</span>
+            <h3>Embed Script</h3>
+            <p>Universal embed script works anywhere—add div and script tag.</p>
+            <p><strong>Time to integrate:</strong> 2-5 minutes</p>
+            <a href="INTEGRATION.md#option-2-embedded-script-wordpress-etc">Learn more →</a>
+          </div>
+
+          <div class="method">
+            <span class="badge">Advanced</span>
+            <h3>Full Control</h3>
+            <p>Manual initialization for complete control and customization.</p>
+            <p><strong>Time to integrate:</strong> 10-20 minutes</p>
+            <a href="INTEGRATION.md#option-3-standalone-html-page">Learn more →</a>
+          </div>
+        </div>
+
+        <p style="margin-top: 2rem; text-align: center;">
+          <strong>→ <a href="INTEGRATION.md">Read Complete Integration Guide</a></strong>
+        </p>
+      </section>
+
+      <!-- Data Sources -->
+      <section>
+        <h2>📊 Data Sources</h2>
+        <p>The map aggregates repeater data from multiple reliable sources:</p>
+        
+        <ul style="margin: 1rem 0 1rem 2rem;">
+          <li><strong>YO Database:</strong> <a href="https://github.com/yo6nam/yodb">yo6nam/yodb</a> (Romanian repeaters)</li>
+          <li><strong>HA Repeaters:</strong> Hungarian amateur radio database (FrequencyBook, RepeaterBook)</li>
+          <li><strong>S5 Repeaters:</strong> Slovenian amateur radio association data</li>
+          <li><strong>YT Repeaters:</strong> Serbian/Yugoslav repeater database</li>
+        </ul>
+
+        <p style="margin-top: 2rem;">
+          <strong>Auto-refresh:</strong> Configure auto-refresh interval in <code>config.js</code> to keep data fresh.
+        </p>
+      </section>
+
+      <!-- Technical Details -->
+      <section>
+        <h2>🛠 Technical Stack</h2>
+        
+        <h3>Libraries & Dependencies</h3>
+        <ul style="margin-left: 2rem;">
+          <li><strong>Leaflet 1.9.4</strong> - Interactive maps</li>
+          <li><strong>Leaflet MarkerCluster 1.5.1</strong> - Marker clustering</li>
+          <li><strong>QTH-Locator</strong> - Maidenhead locator conversion</li>
+          <li><strong>Nominatim API</strong> - Reverse geocoding</li>
+        </ul>
+
+        <h3>Architecture</h3>
+        <ul style="margin-left: 2rem;">
+          <li><strong>config.js</strong> - Centralized configuration</li>
+          <li><strong>icon-factory.js</strong> - Reusable icon creation</li>
+          <li><strong>api-manager.js</strong> - Error handling & queue management</li>
+          <li><strong>repeaters-map.js</strong> - Main application logic</li>
+          <li><strong>embed.js</strong> - Universal embeddable wrapper</li>
+        </ul>
+
+        <h3>Browser Support</h3>
+        <ul style="margin-left: 2rem;">
+          <li>Chrome/Edge 60+</li>
+          <li>Firefox 55+</li>
+          <li>Safari 12+</li>
+          <li>Mobile browsers (iOS Safari 12+, Chrome Android)</li>
+        </ul>
+      </section>
+
+      <!-- Stats -->
+      <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+        <div class="stat">
+          <div class="stat-number">1000+</div>
+          <div class="stat-label">Radio Repeaters</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">4</div>
+          <div class="stat-label">Countries</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">5</div>
+          <div class="stat-label">Integration Methods</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">HTTPS</div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section>
+        <h2>❓ FAQ</h2>
+        
+        <h3>Do I need to modify my site's theme?</h3>
+        <p>No! The embed script works with any website or CMS. Just add a div and the script tag.</p>
+
+        <h3>Is it free to use?</h3>
+        <p>Yes! The entire project is open source under MIT license. Map tiles and APIs are free with usage limits.</p>
+
+        <h3>Can I customize the map appearance?</h3>
+        <p>Absolutely. Edit <code>src/config.js</code> to change colors, default location, zoom levels, and more.</p>
+
+        <h3>What if the data is outdated?</h3>
+        <p>The map loads live data from source APIs. Enable auto-refresh in config to update periodically.</p>
+
+        <h3>How do I report incorrect data?</h3>
+        <p>Check the original data sources (yo6nam/yodb, RepeaterBook, etc.) and contact them directly.</p>
+
+        <h3>Can I use this offline?</h3>
+        <p>Not by default (needs internet for map tiles and data), but you can create a local version with offline tiles.</p>
+      </section>
+
+      <!-- Call to Action -->
+      <section style="text-align: center; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white;">
+        <h2 style="color: white;">Ready to add the map to your site?</h2>
+        <p style="font-size: 1.1rem; margin-bottom: 2rem;">Get started in minutes with our easy integration guides.</p>
+        <div>
+          <a href="INTEGRATION.md" class="button" style="background: white; color: var(--primary);">View Integration Guide</a>
+          <a href="osm.html" class="button" style="background: rgba(255,255,255,0.2); color: white; border-color: white;">See Live Demo</a>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2024 Repeaters Map • <a href="https://github.com/motorox/repeaters-map" style="color: #667eea;">GitHub</a> • <a href="https://github.com/motorox/repeaters-map/blob/master/LICENSE" style="color: #667eea;">MIT License</a></p>
+      <p style="margin-top: 1rem; font-size: 0.9rem;">Originally based on work by Andy Maloney</p>
+    </footer>
+  </body>
+</html>
