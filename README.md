@@ -28,30 +28,60 @@ From the below links i made the JSON files and/or the JS markers arrays:
 ### Tools:
 - [html-table-to-json](https://www.convertjson.com/html-table-to-json.htm)<br/>
 
-## History
-This is from the example found:
-    <div>
-      <p>An example of how to use <a href="https://leafletjs.com/" target="_blank">Leaflet</a>.
-      <p>From the article <a href="https://asmaloney.com/2014/01/code/creating-an-interactive-map-with-leaflet-and-openstreetmap" target="_blank">Creating An Interactive Map With Leaflet and OpenStreetMap</a>
-      <p>Andy Maloney // <a href="https://asmaloney.com" target="_blank">asmaloney.com</a>
-      <br/>23 Jan 2014
-      <p>
-        <b>[06 May 2021]</b>        
-        <ul>
-          <li>Updated to Leaflet 1.7.1, and jQuery 3.6.0.</li>
-          <li>All files reformatted with <a href="https://prettier.io/">prettier</a>.</li>
-          <li>Use <i>https</i> for URLs.</li>
-        </ul>
-      </p>
-      <p><b>[08 Oct 2019]</b>
-        <ul>
-          <li>Updated to Leaflet 1.5.1 and jQuery 3.4.1.</li>
-          <li>Added <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity">Subresource Integrity</a> to CSS and CDN JavaScript.</li>
-          <li>Changed the marker file from .json to .js since it is actually a JavaScript file.</li>
-          <li>Added a new country to the list :-)</li>
-        </ul>
-      <p><b>[16 Jul 2016]</b> Switched to Leaflet 0.7.7.
-      <p><b>[12 Jul 2016]</b> MapQuest discontinued the tile set I was using, so I switched to OpenStreetMap’s tiles. Note that these are useful only for testing. They say on their site:
-        <blockquote>"Apart from very limited testing purposes, you should not use the tiles supplied by OpenStreetMap.org itself."</blockquote>
-      <p><b>[19 Apr 2014]</b> Added <i>http:</i> to the scheme-less ajax.googleapis.com URI so double-clicking this file to open in the browser works.
-    </div>
+## 📝 Recent Updates
+
+### Version 2.0 (2024)
+- ✅ **Removed jQuery** - Switched to modern Fetch API
+- ✅ **Improved Architecture** - Modular design with separate config, icon factory, and API manager
+- ✅ **Error Handling** - Robust error handling with retry logic
+- ✅ **Updated Libraries** - Leaflet 1.9.4 (from 1.7.1), MarkerCluster 1.5.1
+- ✅ **WordPress Integration** - Easy embed script for any website
+- ✅ **Modern Styling** - Responsive design with better UX
+- ✅ **Data Timestamps** - Shows when repeaters data was last updated
+- ✅ **HTTPS Everywhere** - All external resources use HTTPS
+
+### Version 1.0 History
+- **[06 May 2021]** - Updated to Leaflet 1.7.1 and jQuery 3.6.0
+- **[08 Oct 2019]** - Added Subresource Integrity, marker clustering
+- **[16 Jul 2016]** - Switched to Leaflet 0.7.7
+- **[12 Jul 2016]** - Switched to OpenStreetMap tiles
+- **[19 Apr 2014]** - Initial release
+
+**Based on:** [Creating An Interactive Map With Leaflet and OpenStreetMap](https://asmaloney.com/2014/01/code/creating-an-interactive-map-with-leaflet-and-openstreetmap) by Andy Maloney
+
+## 🐛 Troubleshooting
+
+**Map doesn't load?**
+- Check your browser console (F12) for errors
+- Ensure you have internet connection
+- Clear cache and reload
+
+**Markers missing?**
+- Check that data API endpoints are accessible
+- Look for 404 errors in Network tab
+- Verify data files are present
+
+**Performance issues?**
+- Reduce `maxClusterRadius` in config
+- Disable auto-refresh if enabled
+- Check browser Network tab for slow requests
+
+## 📖 Documentation
+
+- **[INTEGRATION.md](INTEGRATION.md)** - Complete integration guide for WordPress, Drupal, etc.
+- **[src/config.js](src/config.js)** - Configuration options
+- **[src/repeaters-map.js](src/repeaters-map.js)** - Main application logic
+
+## 🤝 Contributing
+
+Found a bug or have a suggestion? [Open an issue](https://github.com/motorox/repeaters-map/issues)
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+## 👨‍💻 Authors
+
+- Original concept: Andy Maloney
+- Current maintainer: motorox
+- Contributors: Welcome!

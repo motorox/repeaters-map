@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repeaters Map Embed</title>
+
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-WBkoXxTK8jkbNMsVeukzBmbdDRO7tQ1cUkR8HK1S5s="
+      crossorigin="anonymous"
+    />
+
+    <!-- Leaflet MarkerCluster CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.markercluster@1.5.1/dist/MarkerCluster.css"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.markercluster@1.5.1/dist/MarkerCluster.Default.css"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      }
+
+      #map {
+        width: 100%;
+        height: 100%;
+      }
+
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        z-index: 9999;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        animation: slideIn 0.3s ease-out;
+        display: none;
+      }
+
+      .notification-success {
+        background-color: #10b981;
+        color: white;
+      }
+
+      .notification-error {
+        background-color: #ef4444;
+        color: white;
+      }
+
+      .notification-info {
+        background-color: #3b82f6;
+        color: white;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .leaflet-control-layers {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="map"></div>
+    <div id="notification" class="notification"></div>
+
+    <!-- Leaflet JS -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-3gQP6sTfR0LDr6/0S1EVVvzcEaS4J0vgcxAQzfR5Ewc="
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Leaflet MarkerCluster JS -->
+    <script
+      src="https://unpkg.com/leaflet.markercluster@1.5.1/dist/leaflet.markercluster.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- QTH Locator library -->
+    <script src="../lib/qth-locator.js"></script>
+
+    <!-- Configuration and utilities -->
+    <script src="../src/config.js"></script>
+    <script src="../src/icon-factory.js"></script>
+    <script src="../src/api-manager.js"></script>
+    <script src="../src/repeaters-map.js"></script>
+
+    <!-- Data files -->
+    <script src="../maps/markers-HA.js"></script>
+    <script src="../maps/markers-YT.js"></script>
+    <script src="../maps/markers-S5.js"></script>
+
+    <script>
+      // Initialize map
+      initializeRepeaterMap('map');
+    </script>
+  </body>
+</html>

@@ -1,47 +1,266 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>YO database</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repeaters Map - Interactive OSM Database</title>
 
+    <!-- Leaflet CSS (v1.9.4 - latest stable) -->
     <link
       rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-      integrity="sha384-VzLXTJGPSyTLX6d96AxgkKvE/LRb7ECGyTxuwtpjHnVWVZs2gp5RDjeM/tgBnVdM"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-WBkoXxTK8jkbNMsVeukzBmbdDRO7tQ1cUkR8HK1S5s="
       crossorigin="anonymous"
     />
-    <link rel='stylesheet' src='lib/MarkerCluster.css' />
-    <link rel='stylesheet' src='lib/MarkerCluster.Default.css' />
 
-   <script
-      src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"
-      integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
+    <!-- Leaflet MarkerCluster CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.markercluster@1.5.1/dist/MarkerCluster.css"
       crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-      integrity="sha384-RFZC58YeKApoNsIbBxf4z6JJXmh+geBSgkCQXFyh+4tiFSJmJBt+2FbjxW7Ar16M"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.markercluster@1.5.1/dist/MarkerCluster.Default.css"
       crossorigin="anonymous"
-    ></script>
-    <script type='text/javascript' src='lib/qth-locator.js'></script>
-    <script type='text/javascript' src='lib/leaflet.markercluster.js'></script>
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background-color: #f5f5f5;
+      }
+
+      header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      header h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      header p {
+        font-size: 1rem;
+        opacity: 0.9;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      .legend {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .legend h2 {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .legend-items {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .legend-item img {
+        width: 20px;
+        height: 28px;
+      }
+
+      .legend-item span {
+        font-size: 0.95rem;
+        color: #555;
+      }
+
+      .map-wrapper {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        background: white;
+      }
+
+      #map {
+        width: 100%;
+        height: 600px;
+      }
+
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        z-index: 9999;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        animation: slideIn 0.3s ease-out;
+        display: none;
+      }
+
+      .notification-success {
+        background-color: #10b981;
+        color: white;
+      }
+
+      .notification-error {
+        background-color: #ef4444;
+        color: white;
+      }
+
+      .notification-info {
+        background-color: #3b82f6;
+        color: white;
+      }
+
+      #data-timestamp {
+        text-align: center;
+        padding: 1rem;
+        background-color: #f0f0f0;
+        font-size: 0.9rem;
+        color: #666;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .leaflet-control-layers {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .leaflet-control-layers-list {
+        padding: 0.5rem;
+      }
+
+      @media (max-width: 768px) {
+        header h1 {
+          font-size: 1.5rem;
+        }
+
+        .legend-items {
+          grid-template-columns: 1fr;
+        }
+
+        #map {
+          height: 400px;
+        }
+
+        .container {
+          padding: 1rem;
+        }
+      }
+    </style>
   </head>
 
   <body>
-    <h1>YO database</h1>
-    <p>Here's an interactive map indicating the repeators in YO, YT, HA, S5 areas.</p>
-    <p>Legend:
-      <img src='https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png' width='16' height='26' alt='red' /> = Inactive
-      <img src='https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png' width='16' height='26' alt='blue' /> = FM/C4FM
-      <img src='https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png' width='16' height='26' alt='green' /> = DSTAR
-      <img src='https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png' width='16' height='26' alt='grey' /> = Tetra
-      <img src='https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png' width='16' height='26' alt='orange' /> = DMR
-      <span class="leaflet-div-icon leaflet-zoom-animated leaflet-interactive" style="width: 12px; height: 12px; " tabindex="0"><b>2</b></span> = Cluster of many points
-    </p>
-    <div id="map" style="width: 100%; height: 520px; border: 1px solid #AAA;"></div>
-    <script type='text/javascript' src='maps/markers-HA.js'></script>
-    <script type='text/javascript' src='maps/markers-YT.js'></script>
-    <script type='text/javascript' src='maps/markers-S5.js'></script>
-    <script type='text/javascript' src='src/repeaters-leaf.js'></script>
+    <header>
+      <h1>🗺️ Repeaters Map</h1>
+      <p>Interactive OpenStreetMap with radio repeaters in YO, YT, HA, S5 areas</p>
+    </header>
+
+    <div class="container">
+      <div class="legend">
+        <h2>Legend</h2>
+        <div class="legend-items">
+          <div class="legend-item">
+            <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png" alt="Inactive" />
+            <span>Inactive</span>
+          </div>
+          <div class="legend-item">
+            <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png" alt="FM/C4FM" />
+            <span>FM / C4FM</span>
+          </div>
+          <div class="legend-item">
+            <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png" alt="D-STAR" />
+            <span>D-STAR</span>
+          </div>
+          <div class="legend-item">
+            <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png" alt="Tetra" />
+            <span>Tetra</span>
+          </div>
+          <div class="legend-item">
+            <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png" alt="DMR" />
+            <span>DMR</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-wrapper">
+        <div id="map"></div>
+        <div id="data-timestamp"></div>
+      </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <!-- Leaflet JS (v1.9.4) -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-3gQP6sTfR0LDr6/0S1EVVvzcEaS4J0vgcxAQzfR5Ewc="
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Leaflet MarkerCluster JS -->
+    <script
+      src="https://unpkg.com/leaflet.markercluster@1.5.1/dist/leaflet.markercluster.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- QTH Locator library -->
+    <script src="lib/qth-locator.js"></script>
+
+    <!-- Configuration and utilities -->
+    <script src="src/config.js"></script>
+    <script src="src/icon-factory.js"></script>
+    <script src="src/api-manager.js"></script>
+    <script src="src/repeaters-map.js"></script>
+
+    <!-- Data files -->
+    <script src="maps/markers-HA.js"></script>
+    <script src="maps/markers-YT.js"></script>
+    <script src="maps/markers-S5.js"></script>
+
+    <script>
+      // Initialize map when page loads
+      document.addEventListener('DOMContentLoaded', function () {
+        initializeRepeaterMap('map');
+      });
+    </script>
   </body>
 </html>
